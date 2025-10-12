@@ -37,7 +37,7 @@ type NameString = string
 
 const attendance: Record<DateString, NameString[]> = {}
 
-/** Put attendance in attendance record from the current date set athttps://lcr.churchofjesuschrist.org/report/class-and-quorum-attendance/overview */
+/** Put attendance in attendance record from the current date set at https://lcr.churchofjesuschrist.org/report/class-and-quorum-attendance/overview */
 function getAttendanceForCurrentDateSet() {
   function getAttendance() {
     document.querySelector('tbody')?.childNodes.forEach((node) => {
@@ -71,8 +71,8 @@ function getAttendanceForCurrentDateSet() {
 function consoleLogAttendance() {
   console.log(
     Object.entries(attendance)
-      .map(([name, dates]) => `${name}\n${dates.join('\n')}`)
-      .join('\t')
+      .map(([name, dates]) => `${name}\t${dates.join('\t')}`)
+      .join('\n')
   )
 }
 

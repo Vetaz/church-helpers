@@ -11,7 +11,7 @@ const isLastPage = () => {
 const goToNextPage = () => document.querySelector('#__next > div > div.sc-3wjzbl-0.jEyqMD > div:nth-child(1) > div > div.sc-1bd9vcz-5.GcsXn > div.sc-lf3bj0-0.biBXLT > div.sc-b87b8e2-0.cLfglj')?.click();
 const goToFirstPage = () => document.querySelector('#__next > div > div.sc-3wjzbl-0.jEyqMD > div:nth-child(1) > div > div.sc-1bd9vcz-5.GcsXn > div.sc-lf3bj0-0.biBXLT > div.sc-f155593d-0.jVFBIX')?.click();
 const attendance = {};
-/** Put attendance in attendance record from the current date set athttps://lcr.churchofjesuschrist.org/report/class-and-quorum-attendance/overview */
+/** Put attendance in attendance record from the current date set at https://lcr.churchofjesuschrist.org/report/class-and-quorum-attendance/overview */
 function getAttendanceForCurrentDateSet() {
     function getAttendance() {
         document.querySelector('tbody')?.childNodes.forEach((node) => {
@@ -41,7 +41,7 @@ function getAttendanceForCurrentDateSet() {
 }
 function consoleLogAttendance() {
     console.log(Object.entries(attendance)
-        .map(([name, dates]) => `${name}\n${dates.join('\n')}`)
-        .join('\t'));
+        .map(([name, dates]) => `${name}\t${dates.join('\t')}`)
+        .join('\n'));
 }
 getAttendanceForCurrentDateSet();
