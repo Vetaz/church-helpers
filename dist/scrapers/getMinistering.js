@@ -1,5 +1,5 @@
 "use strict";
-const [district1, district2] = document.querySelectorAll('tbody');
+const [district1, district2, district3] = document.querySelectorAll('tbody');
 const isProposed = document.title.includes('Proposed');
 const ministeringAssignments = [];
 function convertDistrict(district, districtNumber) {
@@ -13,6 +13,7 @@ function convertDistrict(district, districtNumber) {
 }
 convertDistrict(district1, 1);
 convertDistrict(district2, 2);
+convertDistrict(district3, 2);
 console.log(`District Number\tMinistering Brothers\tAssigned Households\n${ministeringAssignments
     .map(([dn, mb, ah]) => `${dn}\t${mb}\t${ah}`)
     .join('\n')}`);

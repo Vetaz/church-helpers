@@ -1,4 +1,4 @@
-const [district1, district2] = document.querySelectorAll('tbody')
+const [district1, district2, district3] = document.querySelectorAll('tbody')
 
 const isProposed = document.title.includes('Proposed')
 
@@ -21,6 +21,7 @@ function convertDistrict(district: HTMLTableSectionElement, districtNumber: numb
 
 convertDistrict(district1, 1)
 convertDistrict(district2, 2)
+convertDistrict(district3, 2)
 
 console.log(
   `District Number\tMinistering Brothers\tAssigned Households\n${ministeringAssignments
