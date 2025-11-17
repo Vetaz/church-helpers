@@ -41,7 +41,8 @@ function getAttendanceForCurrentDateSet() {
 }
 function consoleLogAttendance() {
     console.log(Object.entries(attendance)
-        .map(([name, dates]) => `${name}\t${dates.join('\t')}`)
+        .sort(([dateA], [dateB]) => Number(new Date(dateA)) - Number(new Date(dateB)))
+        .map(([date, names]) => `${date}\t${names.join('\t')}`)
         .join('\n'));
 }
 getAttendanceForCurrentDateSet();
