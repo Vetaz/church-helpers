@@ -71,7 +71,7 @@ function getAttendanceForCurrentDateSet() {
 function consoleLogAttendance() {
   console.log(
     Object.entries(attendance)
-      .map(([name, dates]) => `${name};${dates.join(';')}`)
+      .map(([name, dates]) => `${name}\t${dates.join('\t')}`)
       .join('\n')
   )
 }
