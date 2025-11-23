@@ -21,7 +21,7 @@ function convertDistrict(district: HTMLTableSectionElement, districtNumber: numb
 
 convertDistrict(district1, 1)
 convertDistrict(district2, 2)
-convertDistrict(district3, 2)
+convertDistrict(district3, 3)
 
 console.log(
   `District Number\tMinistering Brothers\tAssigned Households\n${ministeringAssignments

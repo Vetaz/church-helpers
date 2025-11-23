@@ -13,7 +13,7 @@ function convertDistrict(district, districtNumber) {
 }
 convertDistrict(district1, 1);
 convertDistrict(district2, 2);
-convertDistrict(district3, 2);
+convertDistrict(district3, 3);
 console.log(`District Number\tMinistering Brothers\tAssigned Households\n${ministeringAssignments
     .map(([dn, mb, ah]) => `${dn}\t${mb}\t${ah}`)
     .join('\n')}`);
