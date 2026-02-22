@@ -10,7 +10,7 @@ const birthDateIndex = columnIndexes[2]
 const addressIndex = columnIndexes[3]
 
 const data = [...document.querySelectorAll('tbody > tr')].map((node) => {
-  const name = node.children[nameIndex].querySelector('span')?.textContent
+  const name = [...node.children[nameIndex].querySelectorAll('span')].at(-1)?.textContent?.trim()
   const profileLink = node.children[nameIndex].querySelector('a')?.href
   const gender = node.children[genderIndex].textContent
   const birthDate = node.children[birthDateIndex].textContent
