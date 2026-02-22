@@ -93,7 +93,7 @@ const getDateText = (number: number) =>
   document.querySelector('thead')?.childNodes[0].childNodes[number + 2].textContent
 
 const getMembersOfTotalText = () =>
-  document.querySelector(
+  document.querySelector<HTMLElement>(
     '#__next > div > div.sc-3wjzbl-0.jEyqMD > div:nth-child(1) > div > div.sc-1bd9vcz-5.GcsXn > div.sc-lf3bj0-0.biBXLT > div:nth-child(7)',
   )?.textContent
 
@@ -104,16 +104,16 @@ const isLastPage = () => {
 
 const goToNextPage = () =>
   (
-    document.querySelector(
+    document.querySelector<HTMLElement>(
       '#__next > div > div.sc-3wjzbl-0.jEyqMD > div:nth-child(1) > div > div.sc-1bd9vcz-5.GcsXn > div.sc-lf3bj0-0.biBXLT > div.sc-b87b8e2-0.cLfglj',
-    ) as HTMLElement | undefined
+    ) 
   )?.click()
 
 const goToFirstPage = () =>
   (
-    document.querySelector(
+    document.querySelector<HTMLElement>(
       '#__next > div > div.sc-3wjzbl-0.jEyqMD > div:nth-child(1) > div > div.sc-1bd9vcz-5.GcsXn > div.sc-lf3bj0-0.biBXLT > div.sc-f155593d-0.jVFBIX',
-    ) as HTMLElement | undefined
+    )
   )?.click()
 
 /** eg: 28 Sep 2025 */

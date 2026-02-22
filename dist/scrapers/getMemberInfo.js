@@ -1,12 +1,11 @@
 // This script is meant to be run in the browser console for https://lcr.churchofjesuschrist.org/records/member-list?lang=eng
 // Copy the result and paste into Google Sheets
-const headings = Array.from(document.querySelectorAll('thead > tr > th')).map((th) => th.textContent?.trim());
-const columnsWanted = ['Name', 'Gender', 'Birth Date', 'Address'];
-const columnIndexes = columnsWanted.map((column) => headings.findIndex((heading) => heading === column));
-const nameIndex = columnIndexes[0];
-const genderIndex = columnIndexes[1];
-const birthDateIndex = columnIndexes[2];
-const addressIndex = columnIndexes[3];
+const headings = Array.from(document.querySelectorAll('thead > tr > th')).map((th) => th.innerText);
+const findColumnIndex = (column) => headings.findIndex((heading) => heading === column);
+const nameIndex = findColumnIndex('Name');
+const genderIndex = findColumnIndex('Gender');
+const birthDateIndex = findColumnIndex('Birth Date');
+const addressIndex = findColumnIndex('Address');
 const data = [...document.querySelectorAll('tbody > tr')].map((node) => {
     const name = [...node.children[nameIndex].querySelectorAll('span')].at(-1)?.textContent?.trim();
     const profileLink = node.children[nameIndex].querySelector('a')?.href;
