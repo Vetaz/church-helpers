@@ -1,3 +1,5 @@
+export {}
+
 const [district1, district2, district3] = document.querySelectorAll('tbody')
 
 const isProposed = document.title.includes('Proposed')
@@ -26,5 +28,5 @@ convertDistrict(district3, 3)
 console.log(
   `District Number\tMinistering Brothers\tAssigned Households\n${ministeringAssignments
     .map(([dn, mb, ah]) => `${dn}\t${mb}\t${ah}`)
-    .join('\n')}`
+    .join('\n')}`,
 )

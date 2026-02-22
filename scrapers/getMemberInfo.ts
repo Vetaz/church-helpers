@@ -1,3 +1,4 @@
+export { }
 // This script is meant to be run in the browser console for https://lcr.churchofjesuschrist.org/records/member-list?lang=eng
 // Copy the result and paste into Google Sheets
 

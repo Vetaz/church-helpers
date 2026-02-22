@@ -1,4 +1,3 @@
-"use strict";
 /**
  * Transpose a CSV string in the browser without external libraries.
  * Works for simple CSV (no quoted commas or multiline fields).
@@ -120,3 +119,4 @@ function consoleLogAttendance() {
         .join('\n')));
 }
 getAttendanceForCurrentDateSet();
+export {};
