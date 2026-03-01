@@ -1,4 +1,4 @@
-export { }
+export {}
 
 /**
  * Transpose a CSV string in the browser without external libraries.
@@ -103,18 +103,18 @@ const isLastPage = () => {
 }
 
 const goToNextPage = () =>
-  (
-    document.querySelector<HTMLElement>(
+  document
+    .querySelector<HTMLElement>(
       '#__next > div > div.sc-3wjzbl-0.jEyqMD > div:nth-child(1) > div > div.sc-1bd9vcz-5.GcsXn > div.sc-lf3bj0-0.biBXLT > div.sc-b87b8e2-0.cLfglj',
-    ) 
-  )?.click()
+    )
+    ?.click()
 
 const goToFirstPage = () =>
-  (
-    document.querySelector<HTMLElement>(
+  document
+    .querySelector<HTMLElement>(
       '#__next > div > div.sc-3wjzbl-0.jEyqMD > div:nth-child(1) > div > div.sc-1bd9vcz-5.GcsXn > div.sc-lf3bj0-0.biBXLT > div.sc-f155593d-0.jVFBIX',
     )
-  )?.click()
+    ?.click()
 
 /** eg: 28 Sep 2025 */
 type DateString = string

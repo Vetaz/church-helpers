@@ -1,0 +1,10 @@
+{
+  "scripts": {
+    "build": "tsx scripts/buildScrapers"
+  },
+  "devDependencies": {
+    "@types/node": "^24.11.0",
+    "esbuild": "0.27.3",
+    "tsx": "^4.21.0"
+  }
+}

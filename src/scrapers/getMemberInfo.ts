@@ -1,3 +1,5 @@
+import { consoleLogCsv } from '../utils'
+
 export {}
 // This script is meant to be run in the browser console for https://lcr.churchofjesuschrist.org/records/member-list?lang=eng
 // Copy the result and paste into Google Sheets
@@ -22,4 +24,4 @@ const data = [...document.querySelectorAll('tbody > tr')].map((node) => {
   return { name, profileLink, gender, birthDate, address }
 })
 
-console.log(data.map((row) => Object.values(row).join('\t')).join('\n'))
+consoleLogCsv(data)

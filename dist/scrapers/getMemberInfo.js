@@ -1,18 +1,37 @@
-// This script is meant to be run in the browser console for https://lcr.churchofjesuschrist.org/records/member-list?lang=eng
-// Copy the result and paste into Google Sheets
-const headings = Array.from(document.querySelectorAll('thead > tr > th')).map((th) => th.innerText);
-const findColumnIndex = (column) => headings.findIndex((heading) => heading === column);
-const nameIndex = findColumnIndex('Name');
-const genderIndex = findColumnIndex('Gender');
-const birthDateIndex = findColumnIndex('Birth Date');
-const addressIndex = findColumnIndex('Address');
-const data = [...document.querySelectorAll('tbody > tr')].map((node) => {
-    const name = [...node.children[nameIndex].querySelectorAll('span')].at(-1)?.textContent?.trim();
-    const profileLink = node.children[nameIndex].querySelector('a')?.href;
-    const gender = node.children[genderIndex].textContent;
-    const birthDate = node.children[birthDateIndex].textContent;
-    const address = node.children[addressIndex].innerHTML.replaceAll('<br>', ', ');
-    return { name, profileLink, gender, birthDate, address };
+// src/utils.ts
+function consoleLogCsv(data2) {
+  console.log(data2.map((row) => Object.values(row).join("	")).join("\n"));
+}
+function downloadCsv(data2, filename) {
+  const csvContent = Object.keys(data2[0]).join(",") + "\n" + data2.map(
+    (row) => Object.values(row).map((value) => `"${value ?? ""}"`).join(",")
+  ).join("\n");
+  const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.setAttribute("href", url);
+  link.setAttribute("download", filename);
+  link.style.visibility = "hidden";
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
+
+// src/scrapers/getMemberInfo.ts
+var headings = Array.from(document.querySelectorAll("thead > tr > th")).map(
+  (th) => th.innerText
+);
+var findColumnIndex = (column) => headings.findIndex((heading) => heading === column);
+var nameIndex = findColumnIndex("Name");
+var genderIndex = findColumnIndex("Gender");
+var birthDateIndex = findColumnIndex("Birth Date");
+var addressIndex = findColumnIndex("Address");
+var data = [...document.querySelectorAll("tbody > tr")].map((node) => {
+  const name = [...node.children[nameIndex].querySelectorAll("span")].at(-1)?.textContent?.trim();
+  const profileLink = node.children[nameIndex].querySelector("a")?.href;
+  const gender = node.children[genderIndex].textContent;
+  const birthDate = node.children[birthDateIndex].textContent;
+  const address = node.children[addressIndex].innerHTML.replaceAll("<br>", ", ");
+  return { name, profileLink, gender, birthDate, address };
 });
-console.log(data.map((row) => Object.values(row).join('\t')).join('\n'));
-export {};
+consoleLogCsv(data);

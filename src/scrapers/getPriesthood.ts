@@ -1,6 +1,8 @@
+import { consoleLogCsv } from '../utils'
+
 export {}
-// This script is meant to be run in the browser console for https://lcr.churchofjesuschrist.org/mlt/orgs?unitOrgTypeId=70&lang=eng specifically filtered to Members
-// Copy the result and paste into Google Sheets
+//! This script is meant to be run in the browser console for https://lcr.churchofjesuschrist.org/mlt/orgs?unitOrgTypeId=70&lang=eng specifically on the Members tab
+//! Copy the result and paste into Google Sheets
 
 const headings = Array.from(document.querySelectorAll<HTMLTableCellElement>('thead > tr > th')).map(
   (th) => th.innerText,
@@ -17,4 +19,4 @@ const data = [...document.querySelectorAll<HTMLTableRowElement>('tbody > tr')].m
   return { name, priesthood }
 })
 
-console.log(data.map((row) => Object.values(row).join('\t')).join('\n'))
+consoleLogCsv(data)
