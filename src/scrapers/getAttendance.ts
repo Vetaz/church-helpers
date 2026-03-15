@@ -1,4 +1,4 @@
-export {}
+import { parseDate, parseMonthDay } from '../utils'
 
 /**
  * Transpose a CSV string in the browser without external libraries.
@@ -44,44 +44,12 @@ function transposeCSV(csvText: string): string {
  * @returns number - The calculated year
  */
 function getYearFromMonthDay(dateStr: string): number {
-  // Map of month abbreviations to month numbers (0 = January)
-  const monthMap: { [key: string]: number } = {
-    Jan: 0,
-    Feb: 1,
-    Mar: 2,
-    Apr: 3,
-    May: 4,
-    Jun: 5,
-    Jul: 6,
-    Aug: 7,
-    Sep: 8,
-    Oct: 9,
-    Nov: 10,
-    Dec: 11,
-  }
+  const md = parseMonthDay(dateStr)
+  const today = Temporal.Now.plainDateISO()
 
-  // Split the input into day and month
-  const [dayPart, monthPart] = dateStr.trim().split(' ')
-  if (!dayPart || !monthPart || !(monthPart in monthMap)) {
-    throw new Error(`Invalid date string: ${dateStr}`)
-  }
+  const thisYearDate = md.toPlainDate({ year: today.year })
 
-  const day = parseInt(dayPart, 10)
-  const month = monthMap[monthPart]
-
-  // Get today’s date
-  const today = new Date()
-  const thisYear = today.getFullYear()
-
-  // Create a Date object using current year for comparison
-  const inputDate = new Date(thisYear, month, day)
-
-  // If the date has passed or is today, use current year, else previous year
-  if (inputDate <= today) {
-    return thisYear
-  } else {
-    return thisYear - 1
-  }
+  return Temporal.PlainDate.compare(thisYearDate, today) <= 0 ? today.year : today.year - 1
 }
 
 const hasCheckMark = (childNode: Element) =>
@@ -132,7 +100,8 @@ function getAttendanceForCurrentDateSet() {
       if (!nameText) return
       ;[date1, date2, date3, date4, date5].forEach((date, index) => {
         const dateTextWithoutYear = getDateText(index + 1)
-        const dateText = `${getDateText(index + 1)} ${dateTextWithoutYear ? getYearFromMonthDay(dateTextWithoutYear) : ''}`
+        const dateText =
+          `${getDateText(index + 1)} ${dateTextWithoutYear ? getYearFromMonthDay(dateTextWithoutYear) : ''}`.trim()
         if (hasCheckMark(date as Element)) {
           if (!attendance[dateText]) attendance[dateText] = []
           attendance[dateText] = Array.from(new Set(attendance[dateText]).add(nameText))
@@ -158,13 +127,15 @@ function getAttendanceForCurrentDateSet() {
 function consoleLogAttendance() {
   const csv = transposeCSV(
     Object.entries(attendance)
-      .sort(([dateA], [dateB]) => Number(new Date(dateA)) - Number(new Date(dateB)))
-      .map(([date, names]) => `${date}	${names.join('	')}`)
+      .sort(([dateA], [dateB]) => Temporal.PlainDate.compare(parseDate(dateA), parseDate(dateB)))
+      .map(([date, names]) => `${date}\t${names.join('\t')}`)
       .join('\n'),
   )
+
   if (csv) {
     console.log(csv)
   }
 }
+
 consoleLogAttendance()
 getAttendanceForCurrentDateSet()
