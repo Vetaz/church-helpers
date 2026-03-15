@@ -19,7 +19,7 @@ const builds = files.map((file) => {
     entryPoints: [inPath],
     bundle: true,
     legalComments: 'inline',
-    treeShaking: false, // make true if we use all code in each file used.
+    treeShaking: true,
     outfile: outPath,
     platform: 'browser',
     format: 'esm',

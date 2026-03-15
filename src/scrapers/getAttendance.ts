@@ -156,14 +156,15 @@ function getAttendanceForCurrentDateSet() {
 }
 
 function consoleLogAttendance() {
-  console.log(
-    transposeCSV(
-      Object.entries(attendance)
-        .sort(([dateA], [dateB]) => Number(new Date(dateA)) - Number(new Date(dateB)))
-        .map(([date, names]) => `${date}\t${names.join('\t')}`)
-        .join('\n'),
-    ),
+  const csv = transposeCSV(
+    Object.entries(attendance)
+      .sort(([dateA], [dateB]) => Number(new Date(dateA)) - Number(new Date(dateB)))
+      .map(([date, names]) => `${date}	${names.join('	')}`)
+      .join('\n'),
   )
+  if (csv) {
+    console.log(csv)
+  }
 }
-
+consoleLogAttendance()
 getAttendanceForCurrentDateSet()

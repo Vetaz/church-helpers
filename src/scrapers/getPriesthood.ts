@@ -1,6 +1,5 @@
 import { consoleLogCsv } from '../utils'
 
-export {}
 //! This script is meant to be run in the browser console for https://lcr.churchofjesuschrist.org/mlt/orgs?unitOrgTypeId=70&lang=eng specifically on the Members tab
 //! Copy the result and paste into Google Sheets
 
