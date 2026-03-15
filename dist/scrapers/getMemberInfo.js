@@ -4,6 +4,9 @@ function consoleLogCsv(data2) {
 }
 
 // src/scrapers/getMemberInfo.ts
+//! This script is meant to be run in the browser console for https://lcr.churchofjesuschrist.org/records/member-list?lang=eng
+//! Copy the result and paste into Google Sheets
+window.scrollTo(0, document.body.scrollHeight);
 var headings = Array.from(document.querySelectorAll("thead > tr > th")).map(
   (th) => th.innerText
 );
@@ -20,4 +23,8 @@ var data = [...document.querySelectorAll("tbody > tr")].map((node) => {
   const address = node.children[addressIndex].innerHTML.replaceAll("<br>", ", ");
   return { name, profileLink, gender, birthDate, address };
 });
-consoleLogCsv(data);
+var waitTimeMs = 3e3;
+console.log(`Waiting ${waitTimeMs / 1e3} seconds for all data to load...`);
+setTimeout(() => {
+  consoleLogCsv(data);
+}, waitTimeMs);

@@ -1,7 +1,10 @@
 import { consoleLogCsv } from '../utils'
 
-// This script is meant to be run in the browser console for https://lcr.churchofjesuschrist.org/records/member-list?lang=eng
-// Copy the result and paste into Google Sheets
+//! This script is meant to be run in the browser console for https://lcr.churchofjesuschrist.org/records/member-list?lang=eng
+//! Copy the result and paste into Google Sheets
+
+// Load all data by scrolling to the bottom
+window.scrollTo(0, document.body.scrollHeight)
 
 const headings = Array.from(document.querySelectorAll<HTMLTableCellElement>('thead > tr > th')).map(
   (th) => th.innerText,
@@ -23,4 +26,8 @@ const data = [...document.querySelectorAll('tbody > tr')].map((node) => {
   return { name, profileLink, gender, birthDate, address }
 })
 
-consoleLogCsv(data)
+const waitTimeMs = 3_000
+console.log(`Waiting ${waitTimeMs / 1000} seconds for all data to load...`)
+setTimeout(() => {
+  consoleLogCsv(data)
+}, waitTimeMs)
