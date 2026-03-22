@@ -3,19 +3,24 @@ import { consoleLogCsv } from '../utils'
 //! This script is meant to be run in the browser console for https://lcr.churchofjesuschrist.org/mlt/orgs?unitOrgTypeId=70&lang=eng specifically on the Members tab
 //! Copy the result and paste into Google Sheets
 
-const headings = Array.from(document.querySelectorAll<HTMLTableCellElement>('thead > tr > th')).map(
-  (th) => th.innerText,
-)
+export function getPriesthood(): { name: string; priesthood: string }[] {
+  const headings = Array.from(document.querySelectorAll<HTMLTableCellElement>('thead > tr > th')).map(
+    (th) => th.innerText,
+  )
 
-const findColumnIndex = (column: string) => headings.findIndex((heading) => heading === column)
-const nameIndex = findColumnIndex('Name')
-const priesthoodIndex = findColumnIndex('Priesthood')
+  const findColumnIndex = (column: string) => headings.findIndex((heading) => heading === column)
+  const nameIndex = findColumnIndex('Name')
+  const priesthoodIndex = findColumnIndex('Priesthood')
 
-const data = [...document.querySelectorAll<HTMLTableRowElement>('tbody > tr')].map((node) => {
-  const name = (node.children[nameIndex] as HTMLTableCellElement).innerText
-  const priesthood = (node.children[priesthoodIndex] as HTMLTableCellElement).innerText
+  const data = [...document.querySelectorAll<HTMLTableRowElement>('tbody > tr')].map((node) => {
+    const name = (node.children[nameIndex] as HTMLTableCellElement).innerText
+    const priesthood = (node.children[priesthoodIndex] as HTMLTableCellElement).innerText
 
-  return { name, priesthood }
-})
+    return { name, priesthood }
+  })
 
-consoleLogCsv(data)
+  return data
+}
+
+// For direct use
+consoleLogCsv(getPriesthood())

@@ -1,6 +1,22 @@
 {
+  "name": "church-helpers",
+  "version": "0.1.0",
+  "type": "module",
+  "main": "./dist/esm/index.js",
+  "types": "./dist/types/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/esm/index.js",
+      "types": "./dist/types/index.d.ts"
+    }
+  },
+  "files": [
+    "dist"
+  ],
   "scripts": {
-    "build": "tsx scripts/buildScrapers"
+    "bundle": "tsx scripts/buildScrapers",
+    "build": "tsc -p build.tsconfig.json",
+    "build:all": "npm run build && npm run bundle"
   },
   "devDependencies": {
     "@js-temporal/polyfill": "^0.5.1",

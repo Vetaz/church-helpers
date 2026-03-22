@@ -1,32 +1,31 @@
-export {}
+export function getMinistering(): [number, string, string][] {
+  const [district1, district2, district3] = document.querySelectorAll('tbody')
 
-const [district1, district2, district3] = document.querySelectorAll('tbody')
+  const isProposed = document.title.includes('Proposed')
 
-const isProposed = document.title.includes('Proposed')
+  const ministeringAssignments: [number, string, string][] = []
 
-type MinisteringBrothers = string
-type AssignedHouseholds = string
-type DistrictNumber = number
+  function convertDistrict(district: HTMLTableSectionElement, districtNumber: number) {
+    district.childNodes.forEach((node) => {
+      const ministeringBrothersNode = node.childNodes[1]
+      const assignedHouseholdsNode = node.childNodes[isProposed ? 2 : 6]
 
-const ministeringAssignments: [DistrictNumber, MinisteringBrothers, AssignedHouseholds][] = []
+      const ministeringBrothers = ministeringBrothersNode?.textContent?.split('  ').join('; ') ?? ''
+      const assignedHouseholds = assignedHouseholdsNode?.textContent?.split('  ').join('; ') ?? ''
+      ministeringAssignments.push([districtNumber, ministeringBrothers, assignedHouseholds])
+    })
+  }
 
-function convertDistrict(district: HTMLTableSectionElement, districtNumber: number) {
-  district.childNodes.forEach((node) => {
-    const ministeringBrothersNode = node.childNodes[1]
-    const assignedHouseholdsNode = node.childNodes[isProposed ? 2 : 6]
+  convertDistrict(district1, 1)
+  convertDistrict(district2, 2)
+  convertDistrict(district3, 3)
 
-    const ministeringBrothers = ministeringBrothersNode?.textContent?.split('  ').join('; ') ?? ''
-    const assignedHouseholds = assignedHouseholdsNode?.textContent?.split('  ').join('; ') ?? ''
-    ministeringAssignments.push([districtNumber, ministeringBrothers, assignedHouseholds])
-  })
+  return ministeringAssignments
 }
 
-convertDistrict(district1, 1)
-convertDistrict(district2, 2)
-convertDistrict(district3, 3)
-
+// For direct use
 console.log(
-  `District Number\tMinistering Brothers\tAssigned Households\n${ministeringAssignments
+  `District Number\tMinistering Brothers\tAssigned Households\n${getMinistering()
     .map(([dn, mb, ah]) => `${dn}\t${mb}\t${ah}`)
     .join('\n')}`,
 )

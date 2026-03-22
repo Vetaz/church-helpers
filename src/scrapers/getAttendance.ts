@@ -119,9 +119,11 @@ function getAttendanceForCurrentDateSet() {
   }
   console.log('Got attendance for current date set')
   console.log(
-    `If you want to add attendance for other dates, rerun getAttendanceForCurrentDateSet() after switching to the new date set.`,
+    `If you want to add attendance for other dates, rerun churchHelpers.getAttendanceForCurrentDateSet() after switching to the new date set.`,
   )
-  console.log('If you have all the attendance data you need, run consoleLogAttendance() to log it to the console.')
+  console.log(
+    'If you have all the attendance data you need, run churchHelpers.consoleLogAttendance() to log it to the console.',
+  )
 }
 
 function consoleLogAttendance() {
@@ -139,3 +141,5 @@ function consoleLogAttendance() {
 
 consoleLogAttendance()
 getAttendanceForCurrentDateSet()
+
+export { getAttendanceForCurrentDateSet, consoleLogAttendance }
