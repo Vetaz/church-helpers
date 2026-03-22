@@ -16,7 +16,9 @@ export function getMinistering() {
     convertDistrict(district3, 3);
     return ministeringAssignments;
 }
-// For direct use
-console.log(`District Number\tMinistering Brothers\tAssigned Households\n${getMinistering()
-    .map(([dn, mb, ah]) => `${dn}\t${mb}\t${ah}`)
-    .join('\n')}`);
+if (typeof window !== 'undefined' && !window.DO_NOT_AUTO_RUN_SCRAPERS) {
+    // For direct use
+    console.log(`District Number\tMinistering Brothers\tAssigned Households\n${getMinistering()
+        .map(([dn, mb, ah]) => `${dn}\t${mb}\t${ah}`)
+        .join('\n')}`);
+}

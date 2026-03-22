@@ -87,7 +87,7 @@ function getAttendanceForCurrentDateSet() {
     console.log(`If you want to add attendance for other dates, rerun churchHelpers.getAttendanceForCurrentDateSet() after switching to the new date set.`);
     console.log('If you have all the attendance data you need, run churchHelpers.consoleLogAttendance() to log it to the console.');
 }
-function consoleLogAttendance() {
+function getAttendanceCsv() {
     const csv = transposeCSV(Object.entries(attendance)
         .sort(([dateA], [dateB]) => Temporal.PlainDate.compare(parseDate(dateA), parseDate(dateB)))
         .map(([date, names]) => `${date}\t${names.join('\t')}`)
@@ -95,7 +95,15 @@ function consoleLogAttendance() {
     if (csv) {
         console.log(csv);
     }
+    return csv;
 }
-consoleLogAttendance();
-getAttendanceForCurrentDateSet();
-export { getAttendanceForCurrentDateSet, consoleLogAttendance };
+function consoleLogAttendance() {
+    const csv = getAttendanceCsv();
+    if (csv) {
+        console.log(csv);
+    }
+}
+if (typeof window !== 'undefined' && !window.DO_NOT_AUTO_RUN_SCRAPERS) {
+    getAttendanceForCurrentDateSet();
+}
+export { getAttendanceForCurrentDateSet, getAttendanceCsv, consoleLogAttendance };

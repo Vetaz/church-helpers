@@ -126,7 +126,7 @@ function getAttendanceForCurrentDateSet() {
   )
 }
 
-function consoleLogAttendance() {
+function getAttendanceCsv() {
   const csv = transposeCSV(
     Object.entries(attendance)
       .sort(([dateA], [dateB]) => Temporal.PlainDate.compare(parseDate(dateA), parseDate(dateB)))
@@ -137,9 +137,18 @@ function consoleLogAttendance() {
   if (csv) {
     console.log(csv)
   }
+  return csv
 }
 
-consoleLogAttendance()
-getAttendanceForCurrentDateSet()
+function consoleLogAttendance() {
+  const csv = getAttendanceCsv()
+  if (csv) {
+    console.log(csv)
+  }
+}
 
-export { getAttendanceForCurrentDateSet, consoleLogAttendance }
+if (typeof window !== 'undefined' && !window.DO_NOT_AUTO_RUN_SCRAPERS) {
+  getAttendanceForCurrentDateSet()
+}
+
+export { getAttendanceForCurrentDateSet, getAttendanceCsv, consoleLogAttendance }

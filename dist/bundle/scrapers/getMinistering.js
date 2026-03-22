@@ -41,9 +41,11 @@ var churchHelpers = (() => {
     convertDistrict(district3, 3);
     return ministeringAssignments;
   }
-  console.log(
-    `District Number	Ministering Brothers	Assigned Households
+  if (typeof window !== "undefined" && !window.DO_NOT_AUTO_RUN_SCRAPERS) {
+    console.log(
+      `District Number	Ministering Brothers	Assigned Households
 ${getMinistering().map(([dn, mb, ah]) => `${dn}	${mb}	${ah}`).join("\n")}`
-  );
+    );
+  }
   return __toCommonJS(getMinistering_exports);
 })();

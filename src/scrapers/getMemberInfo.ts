@@ -38,5 +38,7 @@ export function getMemberInfo(): Promise<
   })
 }
 
-// For direct use in console
-getMemberInfo().then(consoleLogCsv)
+if (typeof window !== 'undefined' && !window.DO_NOT_AUTO_RUN_SCRAPERS) {
+  // For direct use in console
+  getMemberInfo().then(consoleLogCsv)
+}

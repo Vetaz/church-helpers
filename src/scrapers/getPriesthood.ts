@@ -22,5 +22,7 @@ export function getPriesthood(): { name: string; priesthood: string }[] {
   return data
 }
 
-// For direct use
-consoleLogCsv(getPriesthood())
+if (typeof window !== 'undefined' && !window.DO_NOT_AUTO_RUN_SCRAPERS) {
+  // For direct use
+  consoleLogCsv(getPriesthood())
+}

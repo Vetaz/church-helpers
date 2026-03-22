@@ -22,6 +22,7 @@ var churchHelpers = (() => {
   var getAttendance_exports = {};
   __export(getAttendance_exports, {
     consoleLogAttendance: () => consoleLogAttendance,
+    getAttendanceCsv: () => getAttendanceCsv,
     getAttendanceForCurrentDateSet: () => getAttendanceForCurrentDateSet
   });
 
@@ -133,15 +134,23 @@ var churchHelpers = (() => {
       "If you have all the attendance data you need, run churchHelpers.consoleLogAttendance() to log it to the console."
     );
   }
-  function consoleLogAttendance() {
+  function getAttendanceCsv() {
     const csv = transposeCSV(
       Object.entries(attendance).sort(([dateA], [dateB]) => Temporal.PlainDate.compare(parseDate(dateA), parseDate(dateB))).map(([date, names]) => `${date}	${names.join("	")}`).join("\n")
     );
     if (csv) {
       console.log(csv);
     }
+    return csv;
   }
-  consoleLogAttendance();
-  getAttendanceForCurrentDateSet();
+  function consoleLogAttendance() {
+    const csv = getAttendanceCsv();
+    if (csv) {
+      console.log(csv);
+    }
+  }
+  if (typeof window !== "undefined" && !window.DO_NOT_AUTO_RUN_SCRAPERS) {
+    getAttendanceForCurrentDateSet();
+  }
   return __toCommonJS(getAttendance_exports);
 })();

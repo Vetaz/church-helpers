@@ -46,6 +46,8 @@ var churchHelpers = (() => {
     });
     return data;
   }
-  consoleLogCsv(getPriesthood());
+  if (typeof window !== "undefined" && !window.DO_NOT_AUTO_RUN_SCRAPERS) {
+    consoleLogCsv(getPriesthood());
+  }
   return __toCommonJS(getPriesthood_exports);
 })();

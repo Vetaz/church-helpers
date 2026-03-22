@@ -17,4 +17,7 @@ declare global {
     export type Calendar = TemporalPolyfill.Calendar
     export type TimeZone = TemporalPolyfill.TimeZone
   }
+  interface Window {
+    DO_NOT_AUTO_RUN_SCRAPERS?: boolean
+  }
 }

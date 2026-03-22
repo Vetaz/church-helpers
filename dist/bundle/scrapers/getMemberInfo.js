@@ -58,6 +58,8 @@ var churchHelpers = (() => {
       }, waitTimeMs);
     });
   }
-  getMemberInfo().then(consoleLogCsv);
+  if (typeof window !== "undefined" && !window.DO_NOT_AUTO_RUN_SCRAPERS) {
+    getMemberInfo().then(consoleLogCsv);
+  }
   return __toCommonJS(getMemberInfo_exports);
 })();
