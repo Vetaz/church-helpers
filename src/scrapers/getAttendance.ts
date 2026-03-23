@@ -58,31 +58,7 @@ const hasCheckMark = (childNode: Element) =>
 
 /** Gets the date text where 1 is the first date text in the header. Website only shows 5 at a time */
 const getDateText = (number: number) =>
-  document.querySelector('thead')?.childNodes[0].childNodes[number + 2].textContent
-
-const getMembersOfTotalText = () =>
-  document.querySelector<HTMLElement>(
-    '#__next > div > div.sc-3wjzbl-0.jEyqMD > div:nth-child(1) > div > div.sc-1bd9vcz-5.GcsXn > div.sc-lf3bj0-0.biBXLT > div:nth-child(7)',
-  )?.textContent
-
-const isLastPage = () => {
-  const total = getMembersOfTotalText()?.split('/')[1]
-  return new RegExp(`-${total}/${total}`).test(getMembersOfTotalText() ?? '')
-}
-
-const goToNextPage = () =>
-  document
-    .querySelector<HTMLElement>(
-      '#__next > div > div.sc-3wjzbl-0.jEyqMD > div:nth-child(1) > div > div.sc-1bd9vcz-5.GcsXn > div.sc-lf3bj0-0.biBXLT > div.sc-b87b8e2-0.cLfglj',
-    )
-    ?.click()
-
-const goToFirstPage = () =>
-  document
-    .querySelector<HTMLElement>(
-      '#__next > div > div.sc-3wjzbl-0.jEyqMD > div:nth-child(1) > div > div.sc-1bd9vcz-5.GcsXn > div.sc-lf3bj0-0.biBXLT > div.sc-f155593d-0.jVFBIX',
-    )
-    ?.click()
+  document.querySelectorAll<HTMLTableCellElement>('thead > tr > th')[number + 2]?.innerText
 
 /** eg: 28 Sep 2025 */
 type DateString = string
@@ -93,30 +69,23 @@ const attendance: Record<DateString, NameString[]> = {}
 
 /** Put attendance in attendance record from the current date set at https://lcr.churchofjesuschrist.org/report/class-and-quorum-attendance/overview */
 function getAttendanceForCurrentDateSet() {
-  function getAttendance() {
-    document.querySelector('tbody')?.childNodes.forEach((node) => {
-      const [name, gender, , date1, date2, date3, date4, date5] = node.childNodes
-      const nameText = name.textContent?.trim()
-      if (!nameText) return
-      ;[date1, date2, date3, date4, date5].forEach((date, index) => {
-        const dateTextWithoutYear = getDateText(index + 1)
-        const dateText =
-          `${getDateText(index + 1)} ${dateTextWithoutYear ? getYearFromMonthDay(dateTextWithoutYear) : ''}`.trim()
-        if (hasCheckMark(date as Element)) {
-          if (!attendance[dateText]) attendance[dateText] = []
-          attendance[dateText] = Array.from(new Set(attendance[dateText]).add(nameText))
-        }
-      })
+  document.querySelectorAll<HTMLTableRowElement>('tbody:first-of-type > tr')?.forEach((rowElement) => {
+    const [name, gender, ...dates] = rowElement.querySelectorAll<HTMLTableCellElement>('td')
+    const nameText = name.innerText?.trim()
+    if (!nameText) return
+    dates.forEach((date, index) => {
+      const dateTextWithoutYear = getDateText(index)
+      // Day can be 01, but we want to remove the leading zero for consistency with other date formats
+      const day = String(Number(dateTextWithoutYear.split(' ')[0]))
+      const month = dateTextWithoutYear.split(' ')[1]
+      const dateText = `${day} ${month} ${getYearFromMonthDay(dateTextWithoutYear)}`.trim()
+      if (hasCheckMark(date)) {
+        if (!attendance[dateText]) attendance[dateText] = []
+        attendance[dateText] = Array.from(new Set(attendance[dateText]).add(nameText))
+      }
     })
-  }
+  })
 
-  goToFirstPage()
-  getAttendance()
-
-  while (!isLastPage()) {
-    goToNextPage()
-    getAttendance()
-  }
   console.log('Got attendance for current date set')
   console.log(
     `If you want to add attendance for other dates, rerun churchHelpers.getAttendanceForCurrentDateSet() after switching to the new date set.`,
@@ -133,10 +102,6 @@ function getAttendanceCsv() {
       .map(([date, names]) => `${date}\t${names.join('\t')}`)
       .join('\n'),
   )
-
-  if (csv) {
-    console.log(csv)
-  }
   return csv
 }
 
