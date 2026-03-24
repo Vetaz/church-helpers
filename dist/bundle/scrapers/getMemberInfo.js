@@ -32,8 +32,17 @@ var churchHelpers = (() => {
   // src/scrapers/getMemberInfo.ts
   //! This script is meant to be run in the browser console for https://lcr.churchofjesuschrist.org/records/member-list?lang=eng
   //! Copy the result and paste into Google Sheets
-  function getMemberInfo() {
+  function showAddressInTable() {
+    document.querySelector("form button")?.click();
+    document.querySelectorAll("form button + ul li")[3]?.querySelector("input")?.click();
+    document.querySelector("form button")?.click();
+  }
+  var waitTimeMs = 3e3;
+  async function getMemberInfo() {
+    showAddressInTable();
     window.scrollTo(0, document.body.scrollHeight);
+    console.log(`Waiting ${waitTimeMs / 1e3} seconds for all data to load...`);
+    await new Promise((resolve) => setTimeout(resolve, waitTimeMs));
     const headings = Array.from(document.querySelectorAll("thead > tr > th")).map(
       (th) => th.innerText
     );
@@ -50,13 +59,7 @@ var churchHelpers = (() => {
       const address = node.children[addressIndex].innerHTML.replaceAll("<br>", ", ");
       return { name, profileLink, gender, birthDate, address };
     });
-    const waitTimeMs = 3e3;
-    console.log(`Waiting ${waitTimeMs / 1e3} seconds for all data to load...`);
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve(data);
-      }, waitTimeMs);
-    });
+    return data;
   }
   if (typeof window !== "undefined" && !window.DO_NOT_AUTO_RUN_SCRAPERS) {
     getMemberInfo().then(consoleLogCsv);

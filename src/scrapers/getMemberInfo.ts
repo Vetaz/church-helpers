@@ -3,11 +3,22 @@ import { consoleLogCsv } from '../utils'
 //! This script is meant to be run in the browser console for https://lcr.churchofjesuschrist.org/records/member-list?lang=eng
 //! Copy the result and paste into Google Sheets
 
-export function getMemberInfo(): Promise<
+function showAddressInTable() {
+  document.querySelector<HTMLButtonElement>('form button')?.click()
+  document.querySelectorAll<HTMLLIElement>('form button + ul li')[3]?.querySelector<HTMLInputElement>('input')?.click()
+  document.querySelector<HTMLButtonElement>('form button')?.click()
+}
+
+const waitTimeMs = 3_000
+
+export async function getMemberInfo(): Promise<
   { name?: string; profileLink?: string; gender?: string; birthDate?: string; address?: string }[]
 > {
+  showAddressInTable()
   // Load all data by scrolling to the bottom
   window.scrollTo(0, document.body.scrollHeight)
+  console.log(`Waiting ${waitTimeMs / 1000} seconds for all data to load...`)
+  await new Promise((resolve) => setTimeout(resolve, waitTimeMs))
 
   const headings = Array.from(document.querySelectorAll<HTMLTableCellElement>('thead > tr > th')).map(
     (th) => th.innerText,
@@ -29,13 +40,7 @@ export function getMemberInfo(): Promise<
     return { name, profileLink, gender, birthDate, address }
   })
 
-  const waitTimeMs = 3_000
-  console.log(`Waiting ${waitTimeMs / 1000} seconds for all data to load...`)
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(data)
-    }, waitTimeMs)
-  })
+  return data
 }
 
 if (typeof window !== 'undefined' && !window.DO_NOT_AUTO_RUN_SCRAPERS) {
