@@ -21,8 +21,11 @@ function transposeCSV(csvText) {
     const transposed = [];
     for (let col = 0; col < maxCols; col++) {
         const newRow = [];
-        for (let row = 0; row < rows.length; row++) {
-            newRow.push(rows[row][col]);
+        for (const row of rows) {
+            const cell = row[col];
+            if (cell !== undefined) {
+                newRow.push(cell);
+            }
         }
         transposed.push(newRow);
     }
@@ -49,20 +52,21 @@ const getDateText = (number) => document.querySelectorAll('thead > tr > th')[num
 const attendance = {};
 /** Put attendance in attendance record from the current date set at https://lcr.churchofjesuschrist.org/report/class-and-quorum-attendance/overview */
 function getAttendanceForCurrentDateSet() {
-    document.querySelectorAll('tbody:first-of-type > tr')?.forEach((rowElement) => {
-        const [name, gender, ...dates] = rowElement.querySelectorAll('td');
-        const nameText = name.innerText?.trim();
+    document.querySelectorAll('tbody:first-of-type > tr').forEach((rowElement) => {
+        const [name, _gender, ...dates] = rowElement.querySelectorAll('td');
+        const nameText = name?.innerText.trim();
         if (!nameText)
             return;
         dates.forEach((date, index) => {
             const dateTextWithoutYear = getDateText(index);
             // Day can be 01, but we want to remove the leading zero for consistency with other date formats
-            const day = String(Number(dateTextWithoutYear.split(' ')[0]));
-            const month = dateTextWithoutYear.split(' ')[1];
-            const dateText = `${day} ${month} ${getYearFromMonthDay(dateTextWithoutYear)}`.trim();
+            const day = String(Number(dateTextWithoutYear?.split(' ')[0]));
+            const month = dateTextWithoutYear?.split(' ')[1];
+            if (!month || !dateTextWithoutYear)
+                throw new Error(`Could not get month or date text for index ${String(index)}. dateTextWithoutYear: ${dateTextWithoutYear ?? ''}`);
+            const dateText = `${day} ${month} ${String(getYearFromMonthDay(dateTextWithoutYear))}`.trim();
             if (hasCheckMark(date)) {
-                if (!attendance[dateText])
-                    attendance[dateText] = [];
+                attendance[dateText] ??= [];
                 attendance[dateText] = Array.from(new Set(attendance[dateText]).add(nameText));
             }
         });

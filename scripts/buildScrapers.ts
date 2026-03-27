@@ -29,8 +29,10 @@ const builds = files.map((file) => {
 })
 
 Promise.all(builds)
-  .then(() => console.log('All scrapers and index built.'))
-  .catch((err) => {
+  .then(() => {
+    console.log('All scrapers and index built.')
+  })
+  .catch((err: unknown) => {
     console.error(err)
     process.exit(1)
   })

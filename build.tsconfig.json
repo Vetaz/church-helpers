@@ -5,10 +5,8 @@
     "outDir": "dist/esm",
     "declaration": true,
     "declarationDir": "dist/types",
-    "strict": true,
     "isolatedModules": true,
-    "esModuleInterop": true,
-    "skipLibCheck": true
+    "noEmit": false
   },
   "include": ["src"]
 }

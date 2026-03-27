@@ -13,10 +13,8 @@ declare global {
     export type ZonedDateTime = TemporalPolyfill.ZonedDateTime
     export type Duration = TemporalPolyfill.Duration
     export type Instant = TemporalPolyfill.Instant
-    export type Now = TemporalPolyfill.Now
-    export type Calendar = TemporalPolyfill.Calendar
-    export type TimeZone = TemporalPolyfill.TimeZone
   }
+  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions -- declaration merging
   interface Window {
     DO_NOT_AUTO_RUN_SCRAPERS?: boolean
   }

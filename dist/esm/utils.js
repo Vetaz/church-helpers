@@ -3,6 +3,9 @@ export function consoleLogCsv(data) {
 }
 function parseParts(mdStr) {
     const [dayStr, monthStr, yearStr] = mdStr.trim().split(' ');
+    if (dayStr === undefined || monthStr === undefined) {
+        throw new Error(`Invalid date string: ${mdStr}`);
+    }
     const monthMap = {
         Jan: 1,
         Feb: 2,
@@ -17,9 +20,13 @@ function parseParts(mdStr) {
         Nov: 11,
         Dec: 12,
     };
-    const month = monthMap[monthStr];
-    if (!month)
+    function isTrueMonth(monthStr) {
+        return monthStr in monthMap;
+    }
+    if (!isTrueMonth(monthStr)) {
         throw new Error(`Invalid month: ${monthStr}`);
+    }
+    const month = monthMap[monthStr];
     return {
         day: Number(dayStr),
         month,

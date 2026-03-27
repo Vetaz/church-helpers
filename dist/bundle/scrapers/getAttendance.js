@@ -29,6 +29,9 @@ var churchHelpers = (() => {
   // src/utils.ts
   function parseParts(mdStr) {
     const [dayStr, monthStr, yearStr] = mdStr.trim().split(" ");
+    if (dayStr === void 0 || monthStr === void 0) {
+      throw new Error(`Invalid date string: ${mdStr}`);
+    }
     const monthMap = {
       Jan: 1,
       Feb: 2,
@@ -43,8 +46,13 @@ var churchHelpers = (() => {
       Nov: 11,
       Dec: 12
     };
+    function isTrueMonth(monthStr2) {
+      return monthStr2 in monthMap;
+    }
+    if (!isTrueMonth(monthStr)) {
+      throw new Error(`Invalid month: ${monthStr}`);
+    }
     const month = monthMap[monthStr];
-    if (!month) throw new Error(`Invalid month: ${monthStr}`);
     return {
       day: Number(dayStr),
       month,
@@ -75,8 +83,11 @@ var churchHelpers = (() => {
     const transposed = [];
     for (let col = 0; col < maxCols; col++) {
       const newRow = [];
-      for (let row = 0; row < rows.length; row++) {
-        newRow.push(rows[row][col]);
+      for (const row of rows) {
+        const cell = row[col];
+        if (cell !== void 0) {
+          newRow.push(cell);
+        }
       }
       transposed.push(newRow);
     }
@@ -92,17 +103,21 @@ var churchHelpers = (() => {
   var getDateText = (number) => document.querySelectorAll("thead > tr > th")[number + 2]?.innerText;
   var attendance = {};
   function getAttendanceForCurrentDateSet() {
-    document.querySelectorAll("tbody:first-of-type > tr")?.forEach((rowElement) => {
-      const [name, gender, ...dates] = rowElement.querySelectorAll("td");
-      const nameText = name.innerText?.trim();
+    document.querySelectorAll("tbody:first-of-type > tr").forEach((rowElement) => {
+      const [name, _gender, ...dates] = rowElement.querySelectorAll("td");
+      const nameText = name?.innerText.trim();
       if (!nameText) return;
       dates.forEach((date, index) => {
         const dateTextWithoutYear = getDateText(index);
-        const day = String(Number(dateTextWithoutYear.split(" ")[0]));
-        const month = dateTextWithoutYear.split(" ")[1];
-        const dateText = `${day} ${month} ${getYearFromMonthDay(dateTextWithoutYear)}`.trim();
+        const day = String(Number(dateTextWithoutYear?.split(" ")[0]));
+        const month = dateTextWithoutYear?.split(" ")[1];
+        if (!month || !dateTextWithoutYear)
+          throw new Error(
+            `Could not get month or date text for index ${String(index)}. dateTextWithoutYear: ${dateTextWithoutYear ?? ""}`
+          );
+        const dateText = `${day} ${month} ${String(getYearFromMonthDay(dateTextWithoutYear))}`.trim();
         if (hasCheckMark(date)) {
-          if (!attendance[dateText]) attendance[dateText] = [];
+          attendance[dateText] ??= [];
           attendance[dateText] = Array.from(new Set(attendance[dateText]).add(nameText));
         }
       });

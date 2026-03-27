@@ -79,7 +79,6 @@ var churchHelpers = (() => {
     const headings = Array.from(document.querySelectorAll("thead > tr > th")).map(
       (th) => th.innerText.trim()
     );
-    console.log({ headings });
     const findColumnIndex = (column) => headings.indexOf(column);
     const nameIndex = findColumnIndex("Name");
     const genderIndex = findColumnIndex("Gender");
@@ -87,16 +86,16 @@ var churchHelpers = (() => {
     const addressIndex = findColumnIndex("Address");
     const rows = Array.from(document.querySelectorAll("tbody > tr"));
     return rows.map((node) => {
-      const name = node.children[nameIndex]?.querySelector("span:last-child")?.textContent?.trim();
-      const profileLink = node.children[nameIndex].querySelector("a")?.href;
-      const gender = node.children[genderIndex]?.textContent?.trim();
-      const birthDate = node.children[birthDateIndex]?.textContent?.trim();
+      const name = node.children[nameIndex]?.querySelector("span:last-child")?.textContent.trim();
+      const profileLink = node.children[nameIndex]?.querySelector("a")?.href;
+      const gender = node.children[genderIndex]?.textContent.trim();
+      const birthDate = node.children[birthDateIndex]?.textContent.trim();
       const address = node.children[addressIndex]?.innerHTML.replaceAll("<br>", ", ").trim();
       return { name, profileLink, gender, birthDate, address };
     });
   }
   if (typeof window !== "undefined" && !window.DO_NOT_AUTO_RUN_SCRAPERS) {
-    getMemberInfo().then(consoleLogCsv);
+    getMemberInfo().then(consoleLogCsv).catch(console.log);
   }
   return __toCommonJS(getMemberInfo_exports);
 })();

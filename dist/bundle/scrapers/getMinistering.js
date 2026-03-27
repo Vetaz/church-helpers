@@ -28,7 +28,7 @@ var churchHelpers = (() => {
     const isProposed = document.title.includes("Proposed");
     const ministeringAssignments = [];
     function convertDistrict(district, districtNumber) {
-      district.childNodes.forEach((node) => {
+      district?.childNodes.forEach((node) => {
         const ministeringBrothersNode = node.childNodes[1];
         const assignedHouseholdsNode = node.childNodes[isProposed ? 2 : 6];
         const ministeringBrothers = ministeringBrothersNode?.textContent?.split("  ").join("; ") ?? "";
@@ -44,7 +44,7 @@ var churchHelpers = (() => {
   if (typeof window !== "undefined" && !window.DO_NOT_AUTO_RUN_SCRAPERS) {
     console.log(
       `District Number	Ministering Brothers	Assigned Households
-${getMinistering().map(([dn, mb, ah]) => `${dn}	${mb}	${ah}`).join("\n")}`
+${getMinistering().map(([dn, mb, ah]) => `${String(dn)}	${mb}	${ah}`).join("\n")}`
     );
   }
   return __toCommonJS(getMinistering_exports);

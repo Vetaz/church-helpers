@@ -18,6 +18,8 @@
     "dist"
   ],
   "scripts": {
+    "lint": "eslint .",
+    "check-types": "tsc",
     "bundle": "tsx scripts/buildScrapers",
     "build": "tsc -p build.tsconfig.json",
     "build:all": "npm run build && npm run bundle"
@@ -25,7 +27,8 @@
   "devDependencies": {
     "@js-temporal/polyfill": "^0.5.1",
     "@types/node": "^24.11.0",
-    "esbuild": "0.27.3",
+    "esbuild": "^0.27.4",
+    "eslint-config": "github:vetaz/eslint-config",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3"
   }

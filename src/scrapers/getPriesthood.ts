@@ -8,7 +8,7 @@ export function getPriesthood(): { name: string; priesthood: string }[] {
     (th) => th.innerText,
   )
 
-  const findColumnIndex = (column: string) => headings.findIndex((heading) => heading === column)
+  const findColumnIndex = (column: string): number => headings.findIndex((heading) => heading === column)
   const nameIndex = findColumnIndex('Name')
   const priesthoodIndex = findColumnIndex('Priesthood')
 

@@ -5,8 +5,8 @@ export function getMinistering(): [number, string, string][] {
 
   const ministeringAssignments: [number, string, string][] = []
 
-  function convertDistrict(district: HTMLTableSectionElement, districtNumber: number) {
-    district.childNodes.forEach((node) => {
+  function convertDistrict(district: HTMLTableSectionElement | undefined, districtNumber: number): void {
+    district?.childNodes.forEach((node) => {
       const ministeringBrothersNode = node.childNodes[1]
       const assignedHouseholdsNode = node.childNodes[isProposed ? 2 : 6]
 
@@ -27,7 +27,7 @@ if (typeof window !== 'undefined' && !window.DO_NOT_AUTO_RUN_SCRAPERS) {
   // For direct use
   console.log(
     `District Number\tMinistering Brothers\tAssigned Households\n${getMinistering()
-      .map(([dn, mb, ah]) => `${dn}\t${mb}\t${ah}`)
+      .map(([dn, mb, ah]) => `${String(dn)}\t${mb}\t${ah}`)
       .join('\n')}`,
   )
 }
