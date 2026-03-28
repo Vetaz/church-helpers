@@ -25,16 +25,12 @@
     "build:all": "npm run build && npm run bundle",
     "prepare": "husky"
   },
-  "lint-staged": {
-    "*.{ts,tsx}": "eslint --fix"
-  },
   "devDependencies": {
     "@js-temporal/polyfill": "^0.5.1",
     "@types/node": "^24.11.0",
     "esbuild": "^0.27.4",
     "eslint-config": "github:vetaz/eslint-config",
     "husky": "^9.1.7",
-    "lint-staged": "^16.4.0",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3"
   }
