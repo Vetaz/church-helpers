@@ -6,4 +6,5 @@ type MemberInfo = {
     address?: string;
 };
 export declare function getMemberInfo(): Promise<MemberInfo[]>;
+export declare function toCsv(data: MemberInfo[]): string;
 export {};

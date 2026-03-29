@@ -1,8 +1,34 @@
 //! Go to https://lcr.churchofjesuschrist.org/mlt/report/members-moved-in?lang=eng
 
-import { consoleLogCsv } from '../utils'
+export function getNewMembersAfterPerson(allMembers: MemberInfo[]): MemberInfo[] {
+  const targetName = prompt('Enter the name of the last new move-in you recorded:')?.trim()
+  if (!targetName) throw new Error('No name entered.')
 
-type MemberInfo = { name?: string; moveInDte?: string }
+  // Find all matches
+  const matches = allMembers.filter((m) => m.name === targetName)
+
+  if (matches.length === 0) {
+    throw new Error(`No member found with name "${targetName}".`)
+  }
+  if (matches.length > 1) {
+    throw new Error(`Multiple members found with name "${targetName}". Names must be unique.`)
+  }
+
+  const target = matches[0]
+  if (!target?.moveInDate) {
+    throw new Error(`Target member "${targetName}" has no move-in date.`)
+  }
+
+  const targetDate = new Date(target.moveInDate)
+
+  // Return only members who moved in AFTER the target
+  return allMembers.filter((m) => {
+    if (!m.moveInDate) return false
+    return new Date(m.moveInDate) > targetDate
+  })
+}
+
+type MemberInfo = { name?: string; moveInDate?: string }
 
 export function getNewMembers(): MemberInfo[] {
   const headings = Array.from(document.querySelectorAll<HTMLTableCellElement>('thead > tr > th')).map((th) =>
@@ -20,15 +46,27 @@ export function getNewMembers(): MemberInfo[] {
     const name = node
       .querySelector<HTMLButtonElement>(`td:nth-child(${String(nameIndex + 1)}) button`)
       ?.innerText.trim()
-    const moveInDte = node
+    const moveInDate = node
       .querySelector<HTMLTableCellElement>(`td:nth-child(${String(moveInDateIndex + 1)})`)
       ?.innerText.trim()
 
-    return { name, moveInDte } satisfies MemberInfo
+    return { name, moveInDate } satisfies MemberInfo
   })
 }
 
+export function toCsv(data: MemberInfo[]): string {
+  return data.map((row) => [row.name, '', '', '', row.moveInDate].join('\t')).join('\n')
+}
+
 if (typeof window !== 'undefined' && !window.DO_NOT_AUTO_RUN_SCRAPERS) {
-  const newMembers = getNewMembers()
-  consoleLogCsv(newMembers)
+  const allMembers = getNewMembers()
+
+  try {
+    const filtered = getNewMembersAfterPerson(allMembers)
+
+    console.log(toCsv(filtered))
+  } catch (err) {
+    alert(String(err))
+    console.error(err)
+  }
 }

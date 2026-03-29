@@ -1,5 +1,3 @@
-import { consoleLogCsv } from '../utils'
-
 //! This script is meant to be run in the browser console for https://lcr.churchofjesuschrist.org/records/member-list?lang=eng
 //! Copy the result and paste into Google Sheets
 
@@ -18,10 +16,7 @@ async function waitForTable(): Promise<void> {
       }
     })
 
-    observer.observe(document.body, {
-      childList: true,
-      subtree: true,
-    })
+    observer.observe(document.body, { childList: true, subtree: true })
   })
 }
 
@@ -53,13 +48,7 @@ async function loadAllRows(): Promise<void> {
   }
 }
 
-type MemberInfo = {
-  name?: string
-  profileLink?: string
-  gender?: string
-  birthDate?: string
-  address?: string
-}
+type MemberInfo = { name?: string; profileLink?: string; gender?: string; birthDate?: string; address?: string }
 
 export async function getMemberInfo(): Promise<MemberInfo[]> {
   showAddressInTable()
@@ -92,7 +81,14 @@ export async function getMemberInfo(): Promise<MemberInfo[]> {
   })
 }
 
-if (typeof window !== 'undefined' && !window.DO_NOT_AUTO_RUN_SCRAPERS) {
-  getMemberInfo().then(consoleLogCsv).catch(console.log)
+export function toCsv(data: MemberInfo[]): string {
+  return data.map((row) => [row.name, row.profileLink, row.gender, row.birthDate, row.address].join('\t')).join('\n')
 }
 
+if (typeof window !== 'undefined' && !window.DO_NOT_AUTO_RUN_SCRAPERS) {
+  async function run(): Promise<void> {
+    console.log(toCsv(await getMemberInfo()))
+  }
+
+  void run()
+}

@@ -1,12 +1,4 @@
-export function consoleLogCsv(data: Record<string, unknown>[]): void {
-  console.log(data.map((row) => Object.values(row).join('\t')).join('\n'))
-}
-
-type ParsePartsResult = {
-  day: number
-  month: number
-  year?: number
-}
+type ParsePartsResult = { day: number; month: number; year?: number }
 
 function parseParts(mdStr: string): ParsePartsResult {
   const [dayStr, monthStr, yearStr] = mdStr.trim().split(' ')
@@ -40,11 +32,7 @@ function parseParts(mdStr: string): ParsePartsResult {
 
   const month = monthMap[monthStr]
 
-  return {
-    day: Number(dayStr),
-    month,
-    year: yearStr !== undefined ? Number(yearStr) : undefined,
-  }
+  return { day: Number(dayStr), month, year: yearStr !== undefined ? Number(yearStr) : undefined }
 }
 
 export function parseMonthDay(mdStr: string): Temporal.PlainMonthDay {

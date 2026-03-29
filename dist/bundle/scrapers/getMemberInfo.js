@@ -21,15 +21,9 @@ var churchHelpers = (() => {
   // src/scrapers/getMemberInfo.ts
   var getMemberInfo_exports = {};
   __export(getMemberInfo_exports, {
-    getMemberInfo: () => getMemberInfo
+    getMemberInfo: () => getMemberInfo,
+    toCsv: () => toCsv
   });
-
-  // src/utils.ts
-  function consoleLogCsv(data) {
-    console.log(data.map((row) => Object.values(row).join("	")).join("\n"));
-  }
-
-  // src/scrapers/getMemberInfo.ts
   //! This script is meant to be run in the browser console for https://lcr.churchofjesuschrist.org/records/member-list?lang=eng
   //! Copy the result and paste into Google Sheets
   async function waitForTable() {
@@ -44,10 +38,7 @@ var churchHelpers = (() => {
           resolve();
         }
       });
-      observer.observe(document.body, {
-        childList: true,
-        subtree: true
-      });
+      observer.observe(document.body, { childList: true, subtree: true });
     });
   }
   function showAddressInTable() {
@@ -94,8 +85,14 @@ var churchHelpers = (() => {
       return { name, profileLink, gender, birthDate, address };
     });
   }
+  function toCsv(data) {
+    return data.map((row) => [row.name, row.profileLink, row.gender, row.birthDate, row.address].join("	")).join("\n");
+  }
   if (typeof window !== "undefined" && !window.DO_NOT_AUTO_RUN_SCRAPERS) {
-    getMemberInfo().then(consoleLogCsv).catch(console.log);
+    async function run() {
+      console.log(toCsv(await getMemberInfo()));
+    }
+    void run();
   }
   return __toCommonJS(getMemberInfo_exports);
 })();

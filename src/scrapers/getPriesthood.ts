@@ -1,9 +1,9 @@
-import { consoleLogCsv } from '../utils'
+type PriesthoodInfo = { name: string; priesthood: string }
 
 //! This script is meant to be run in the browser console for https://lcr.churchofjesuschrist.org/mlt/orgs?unitOrgTypeId=70&lang=eng specifically on the Members tab
 //! Copy the result and paste into Google Sheets
 
-export function getPriesthood(): { name: string; priesthood: string }[] {
+export function getPriesthood(): PriesthoodInfo[] {
   const headings = Array.from(document.querySelectorAll<HTMLTableCellElement>('thead > tr > th')).map(
     (th) => th.innerText,
   )
@@ -22,7 +22,10 @@ export function getPriesthood(): { name: string; priesthood: string }[] {
   return data
 }
 
+export function toCsv(data: PriesthoodInfo[]): string {
+  return data.map((row) => [row.name, row.priesthood].join('\t')).join('\n')
+}
+
 if (typeof window !== 'undefined' && !window.DO_NOT_AUTO_RUN_SCRAPERS) {
-  // For direct use
-  consoleLogCsv(getPriesthood())
+  console.log(toCsv(getPriesthood()))
 }

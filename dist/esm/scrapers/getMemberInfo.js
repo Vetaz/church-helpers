@@ -1,4 +1,3 @@
-import { consoleLogCsv } from '../utils';
 //! This script is meant to be run in the browser console for https://lcr.churchofjesuschrist.org/records/member-list?lang=eng
 //! Copy the result and paste into Google Sheets
 async function waitForTable() {
@@ -14,10 +13,7 @@ async function waitForTable() {
                 resolve();
             }
         });
-        observer.observe(document.body, {
-            childList: true,
-            subtree: true,
-        });
+        observer.observe(document.body, { childList: true, subtree: true });
     });
 }
 function showAddressInTable() {
@@ -66,6 +62,12 @@ export async function getMemberInfo() {
         return { name, profileLink, gender, birthDate, address };
     });
 }
+export function toCsv(data) {
+    return data.map((row) => [row.name, row.profileLink, row.gender, row.birthDate, row.address].join('\t')).join('\n');
+}
 if (typeof window !== 'undefined' && !window.DO_NOT_AUTO_RUN_SCRAPERS) {
-    getMemberInfo().then(consoleLogCsv).catch(console.log);
+    async function run() {
+        console.log(toCsv(await getMemberInfo()));
+    }
+    void run();
 }

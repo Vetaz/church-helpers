@@ -1,6 +1,3 @@
-export function consoleLogCsv(data) {
-    console.log(data.map((row) => Object.values(row).join('\t')).join('\n'));
-}
 function parseParts(mdStr) {
     const [dayStr, monthStr, yearStr] = mdStr.trim().split(' ');
     if (dayStr === undefined || monthStr === undefined) {
@@ -27,11 +24,7 @@ function parseParts(mdStr) {
         throw new Error(`Invalid month: ${monthStr}`);
     }
     const month = monthMap[monthStr];
-    return {
-        day: Number(dayStr),
-        month,
-        year: yearStr !== undefined ? Number(yearStr) : undefined,
-    };
+    return { day: Number(dayStr), month, year: yearStr !== undefined ? Number(yearStr) : undefined };
 }
 export function parseMonthDay(mdStr) {
     const { day, month } = parseParts(mdStr);

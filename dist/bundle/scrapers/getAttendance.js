@@ -53,11 +53,7 @@ var churchHelpers = (() => {
       throw new Error(`Invalid month: ${monthStr}`);
     }
     const month = monthMap[monthStr];
-    return {
-      day: Number(dayStr),
-      month,
-      year: yearStr !== void 0 ? Number(yearStr) : void 0
-    };
+    return { day: Number(dayStr), month, year: yearStr !== void 0 ? Number(yearStr) : void 0 };
   }
   function parseMonthDay(mdStr) {
     const { day, month } = parseParts(mdStr);

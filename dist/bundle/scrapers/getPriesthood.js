@@ -21,15 +21,9 @@ var churchHelpers = (() => {
   // src/scrapers/getPriesthood.ts
   var getPriesthood_exports = {};
   __export(getPriesthood_exports, {
-    getPriesthood: () => getPriesthood
+    getPriesthood: () => getPriesthood,
+    toCsv: () => toCsv
   });
-
-  // src/utils.ts
-  function consoleLogCsv(data) {
-    console.log(data.map((row) => Object.values(row).join("	")).join("\n"));
-  }
-
-  // src/scrapers/getPriesthood.ts
   //! This script is meant to be run in the browser console for https://lcr.churchofjesuschrist.org/mlt/orgs?unitOrgTypeId=70&lang=eng specifically on the Members tab
   //! Copy the result and paste into Google Sheets
   function getPriesthood() {
@@ -46,8 +40,11 @@ var churchHelpers = (() => {
     });
     return data;
   }
+  function toCsv(data) {
+    return data.map((row) => [row.name, row.priesthood].join("	")).join("\n");
+  }
   if (typeof window !== "undefined" && !window.DO_NOT_AUTO_RUN_SCRAPERS) {
-    consoleLogCsv(getPriesthood());
+    console.log(toCsv(getPriesthood()));
   }
   return __toCommonJS(getPriesthood_exports);
 })();
