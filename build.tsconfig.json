@@ -4,7 +4,6 @@
     "rootDir": "src",
     "outDir": "dist/esm",
     "declaration": true,
-    "declarationDir": "dist/types",
     "isolatedModules": true,
     "noEmit": false
   },

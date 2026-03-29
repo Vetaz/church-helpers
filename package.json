@@ -7,11 +7,11 @@
   "exports": {
     ".": {
       "import": "./dist/esm/index.js",
-      "types": "./dist/types/index.d.ts"
+      "types": "./dist/esm/index.d.ts"
     },
     "./dist/esm/index.js": {
       "import": "./dist/esm/index.js",
-      "types": "./dist/types/index.d.ts"
+      "types": "./dist/esm/index.d.ts"
     }
   },
   "files": [
@@ -20,9 +20,10 @@
   "scripts": {
     "lint": "eslint .",
     "check-types": "tsc",
-    "bundle": "tsx scripts/buildScrapers",
-    "build": "tsc -p build.tsconfig.json",
-    "build:all": "npm run build && npm run bundle",
+    "clean": "rm -rf dist",
+    "build:bundle": "tsx scripts/buildScrapers",
+    "build:esm": "tsc -p build.tsconfig.json --noCheck",
+    "build": "npm run clean && npm run build:esm && npm run build:bundle",
     "prepare": "husky"
   },
   "devDependencies": {
