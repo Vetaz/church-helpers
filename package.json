@@ -2,8 +2,6 @@
   "name": "church-helpers",
   "version": "0.1.0",
   "type": "module",
-  "main": "./dist/esm/index.js",
-  "types": "./dist/types/index.d.ts",
   "exports": {
     ".": {
       "import": "./dist/esm/index.js",
