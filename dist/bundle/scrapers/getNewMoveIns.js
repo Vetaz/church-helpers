@@ -23,28 +23,45 @@ var churchHelpers = (() => {
   __export(getNewMoveIns_exports, {
     getNewMembers: () => getNewMembers,
     getNewMembersAfterPerson: () => getNewMembersAfterPerson,
-    toCsv: () => toCsv
+    toCsv: () => toCsv,
+    waitForNewMoveInsTable: () => waitForNewMoveInsTable
   });
   //! Go to https://lcr.churchofjesuschrist.org/mlt/report/members-moved-in?lang=eng
-  function getNewMembersAfterPerson(allMembers) {
-    const targetName = prompt("Enter the name of the last new move-in you recorded:")?.trim();
-    if (!targetName) throw new Error("No name entered.");
-    const matches = allMembers.filter((m) => m.name === targetName);
+  async function waitForNewMoveInsTable() {
+    return new Promise((resolve) => {
+      const isReady = () => {
+        const headerExists = !!document.querySelector("thead > tr > th");
+        const rows = document.querySelectorAll("tbody:first-of-type > tr");
+        const visibleRows = Array.from(rows).filter((r) => r.offsetParent !== null);
+        return headerExists && visibleRows.length >= 2;
+      };
+      if (isReady()) {
+        resolve();
+        return;
+      }
+      const observer = new MutationObserver(() => {
+        if (isReady()) {
+          observer.disconnect();
+          resolve();
+        }
+      });
+      observer.observe(document.body, { childList: true, subtree: true });
+    });
+  }
+  function getNewMembersAfterPerson(allMembers, name, moveInDate) {
+    const matches = allMembers.filter((m) => m.name === name && m.moveInDate === moveInDate);
     if (matches.length === 0) {
-      throw new Error(`No member found with name "${targetName}".`);
+      throw new Error(`No member found with name "${name}" and move in date "${moveInDate}".`);
     }
     if (matches.length > 1) {
-      throw new Error(`Multiple members found with name "${targetName}". Names must be unique.`);
+      throw new Error(`Multiple members found with name "${name}"and move in date "${moveInDate}".`);
     }
     const target = matches[0];
     if (!target?.moveInDate) {
-      throw new Error(`Target member "${targetName}" has no move-in date.`);
+      throw new Error(`Target member "${name}" has no move-in date.`);
     }
-    const targetDate = new Date(target.moveInDate);
-    return allMembers.filter((m) => {
-      if (!m.moveInDate) return false;
-      return new Date(m.moveInDate) > targetDate;
-    });
+    const targetIndex = allMembers.findIndex((m) => m.name === name && m.moveInDate === moveInDate);
+    return allMembers.slice(0, targetIndex);
   }
   function getNewMembers() {
     const headings = Array.from(document.querySelectorAll("thead > tr > th")).map(
@@ -66,7 +83,10 @@ var churchHelpers = (() => {
   if (typeof window !== "undefined" && !window.DO_NOT_AUTO_RUN_SCRAPERS) {
     const allMembers = getNewMembers();
     try {
-      const filtered = getNewMembersAfterPerson(allMembers);
+      const targetName = prompt("Enter the name of the last new move-in you recorded:")?.trim();
+      const targetDate = prompt("Enter the Move In Date of the last new move-in you recorded:")?.trim();
+      if (!targetName || !targetDate) throw new Error("No name entered.");
+      const filtered = getNewMembersAfterPerson(allMembers, targetName, targetDate);
       console.log(toCsv(filtered));
     } catch (err) {
       alert(String(err));

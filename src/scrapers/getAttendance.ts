@@ -1,4 +1,5 @@
-import { parseDate, parseMonthDay } from '../utils'
+import { getDateText, hasCheckMark } from '../attendance-utils'
+import { getYearFromMonthDay, parseDayMonthYear } from '../date-utils'
 
 /**
  * Transpose a CSV string in the browser without external libraries.
@@ -39,30 +40,6 @@ function transposeCSV(csvText: string): string {
   // Convert back to CSV string
   return transposed.map((row) => row.join('\t')).join('\n')
 }
-
-/**
- * Parses a date string in "D MMM" format and returns the year based on current date.
- * - If the date (month/day) is on or before today's date in the current year, returns the current year.
- * - Otherwise, returns the previous year.
- * @param dateStr string - Date string like "1 Jan" or "23 Feb"
- * @returns number - The calculated year
- */
-function getYearFromMonthDay(dateStr: string): number {
-  const md = parseMonthDay(dateStr)
-  const today = Temporal.Now.plainDateISO()
-
-  const thisYearDate = md.toPlainDate({ year: today.year })
-
-  return Temporal.PlainDate.compare(thisYearDate, today) <= 0 ? today.year : today.year - 1
-}
-
-const hasCheckMark = (childNode: Element): boolean =>
-  childNode.querySelector('path')?.getAttribute('d') ===
-  'M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10zm5.192-14.25a.997.997 0 00-.327.212l-7.452 7.196-2.187-2.701a1.007 1.007 0 00-1.412-.159l-.002.002a1.002 1.002 0 00-.141 1.415l2.82 3.481c.082.102.183.187.298.25a.997.997 0 001.25-.113L18.254 9.4l.002-.002a1.006 1.006 0 00.025-1.411l-.001-.001a.999.999 0 00-1.088-.237z'
-
-/** Gets the date text where 1 is the first date text in the header. Website only shows 5 at a time */
-const getDateText = (number: number): string | undefined =>
-  document.querySelectorAll<HTMLTableCellElement>('thead > tr > th')[number + 2]?.innerText
 
 /** eg: 28 Sep 2025 */
 type DateString = string
@@ -106,7 +83,7 @@ function getAttendanceForCurrentDateSet(): void {
 function getAttendanceCsv(): string {
   const csv = transposeCSV(
     Object.entries(attendance)
-      .sort(([dateA], [dateB]) => Temporal.PlainDate.compare(parseDate(dateA), parseDate(dateB)))
+      .sort(([dateA], [dateB]) => Temporal.PlainDate.compare(parseDayMonthYear(dateA), parseDayMonthYear(dateB)))
       .map(([date, names]) => `${date}\t${names.join('\t')}`)
       .join('\n'),
   )
