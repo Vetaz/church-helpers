@@ -25,8 +25,9 @@
     "prepare": "husky"
   },
   "devDependencies": {
-    "@types/node": "^24.11.0",
+    "@types/node": "^24.12.2",
     "esbuild": "^0.28.0",
+    "eslint": "^10.2.1",
     "eslint-config": "github:vetaz/eslint-config",
     "husky": "^9.1.7",
     "tsx": "^4.21.0",
