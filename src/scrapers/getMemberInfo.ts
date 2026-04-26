@@ -70,12 +70,15 @@ export async function getMemberInfo(): Promise<MemberInfo[]> {
   const rows = Array.from(document.querySelectorAll('tbody > tr'))
 
   return rows.map((node) => {
-    const name = node.children[nameIndex]?.querySelector('span:last-child')?.textContent.trim()
+    const name = node.children[nameIndex]?.querySelector('button')?.textContent.trim()
 
-    const profileLink = node.children[nameIndex]?.querySelector('a')?.href
-    const gender = node.children[genderIndex]?.textContent.trim()
-    const birthDate = node.children[birthDateIndex]?.textContent.trim()
-    const address = node.children[addressIndex]?.innerHTML.replaceAll('<br>', ', ').trim()
+    const profileId = node.getAttribute('id')
+    const profileLink = profileId ? `https://lcr.churchofjesuschrist.org/mlt/records/member-profile/${profileId}` : ''
+    const gender = (node.children[genderIndex] as HTMLTableCellElement | undefined)?.innerText.trim()
+    const birthDate = (node.children[birthDateIndex] as HTMLTableCellElement | undefined)?.innerText.trim()
+    const address = (node.children[addressIndex] as HTMLTableCellElement | undefined)?.innerText
+      .trim()
+      .replaceAll('\n', ', ')
 
     return { name, profileLink, gender, birthDate, address } satisfies MemberInfo
   })
