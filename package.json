@@ -25,12 +25,12 @@
     "prepare": "husky"
   },
   "devDependencies": {
-    "@types/node": "^24.12.2",
+    "@types/node": "^24.12.4",
     "esbuild": "^0.28.0",
-    "eslint": "^10.2.1",
+    "eslint": "^10.4.1",
     "eslint-config": "github:vetaz/eslint-config",
     "husky": "^9.1.7",
-    "tsx": "^4.21.0",
+    "tsx": "^4.22.4",
     "typescript": "^6.0.3"
   }
 }
