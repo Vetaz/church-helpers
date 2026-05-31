@@ -31,8 +31,14 @@ var churchHelpers = (() => {
       district?.childNodes.forEach((node) => {
         const ministeringBrothersNode = node.childNodes[1];
         const assignedHouseholdsNode = node.childNodes[isProposed ? 2 : 6];
-        const ministeringBrothers = ministeringBrothersNode?.textContent?.split("  ").join("; ") ?? "";
-        const assignedHouseholds = assignedHouseholdsNode?.textContent?.split("  ").join("; ") ?? "";
+        const ministeringBrothers = ministeringBrothersNode?.childNodes ? Array.from(ministeringBrothersNode.childNodes).map((node2) => {
+          const text = node2.textContent;
+          return typeof text === "string" ? text.trim() : "";
+        }).filter((t) => t !== "").join("; ") : "";
+        const assignedHouseholds = assignedHouseholdsNode?.childNodes ? Array.from(assignedHouseholdsNode.childNodes).map((node2) => {
+          const text = node2.textContent;
+          return typeof text === "string" ? text.trim() : "";
+        }).filter((t) => t !== "").join("; ") : "";
         ministeringAssignments.push([districtNumber, ministeringBrothers, assignedHouseholds]);
       });
     }
