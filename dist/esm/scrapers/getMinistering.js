@@ -1,5 +1,5 @@
 export function getMinistering() {
-    const [district1, district2, district3] = document.querySelectorAll('tbody');
+    const [district1, district2, district3, district4] = document.querySelectorAll('tbody');
     const isProposed = document.title.includes('Proposed');
     const ministeringAssignments = [];
     function convertDistrict(district, districtNumber) {
@@ -30,6 +30,7 @@ export function getMinistering() {
     convertDistrict(district1, 1);
     convertDistrict(district2, 2);
     convertDistrict(district3, 3);
+    convertDistrict(district4, 4);
     return ministeringAssignments;
 }
 if (typeof window !== 'undefined' && !window.DO_NOT_AUTO_RUN_SCRAPERS) {
